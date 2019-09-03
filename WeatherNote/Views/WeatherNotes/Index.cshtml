@@ -1,39 +1,60 @@
-﻿@model IEnumerable<WeatherNote.Models.WeatherNote>
-
+﻿         @using Antlr.Runtime         @model  WeatherNote.ViewModel.NoteTempViewModel
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2>@DateTime.Today.ToShortDateString()</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
-</p>
+</p>   
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Notes[0].Date)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Message)
+            @Html.DisplayNameFor(model => model.Notes)
         </th>
+        <th>Max temperature</th>   
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Message)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.WeatherNoteId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.WeatherNoteId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.WeatherNoteId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model.Notes)
+    {
+        <tr>  
+            <td>
+                @item.Date.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @if (item.Date == DateTime.Today.AddDays(1).Date)
+                {
+                    @Html.DisplayFor(m => m.Temps[0]) <text> °C </text>;
+                }
+                else if (item.Date == DateTime.Today.AddDays(2).Date)
+                {
+                    @Html.DisplayFor(m => m.Temps[1]) <text> °C </text>;
+                }
+                else if (item.Date == DateTime.Today.AddDays(3).Date)
+                {
+                    @Html.DisplayFor(m => m.Temps[2]) <text> °C </text>;
+                }
+                else if (item.Date == DateTime.Today.AddDays(4).Date)
+                {
+                    @Html.DisplayFor(m => m.Temps[3]) <text> °C </text>;
+                }
+                else
+                {
+                    <text> ?°C </text>;
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Delete note", "Delete", new {id = item.WeatherNoteId})
+            </td>
 
+        </tr>  
+    }   
 </table>

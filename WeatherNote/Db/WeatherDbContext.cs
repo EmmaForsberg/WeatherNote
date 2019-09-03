@@ -31,9 +31,11 @@ namespace WeatherNote.Db
     {
         protected override void Seed(WeatherDbContext context)
         {
-            context.Notes.Add(new WeatherNote { Date = DateTime.Now, Message = "mymessage"});
+            context.Notes.Add(new WeatherNote { Date = DateTime.Now, Message = "Sol"});
+            context.Notes.Add(new WeatherNote { Date = DateTime.Now, Message = "Regn" });
+            context.Notes.Add(new WeatherNote { Date = DateTime.Now, Message = "Vatten" });
 
             base.Seed(context);
-        }
+        }                                                                                                                                                              
     }
 }

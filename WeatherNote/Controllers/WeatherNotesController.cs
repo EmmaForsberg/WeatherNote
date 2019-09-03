@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WeatherNote.Db;
 using WeatherNote.Models;
+using WeatherNote.ViewModel;
 
 namespace WeatherNote.Controllers
 {
@@ -18,22 +19,19 @@ namespace WeatherNote.Controllers
         // GET: WeatherNotes
         public ActionResult Index()
         {
-            return View(db.Notes.ToList());
-        }
+            var apiclass = new ApiImplementation.TemperaturApi();
+            apiclass.TempRequest();
+           var mytemperaturlist = apiclass.ReturningTemperatures();
 
-        // GET: WeatherNotes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            var notes = db.Notes.ToList();
+
+            var viewmodel = new NoteTempViewModel
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Models.WeatherNote weatherNote = db.Notes.Find(id);
-            if (weatherNote == null)
-            {
-                return HttpNotFound();
-            }
-            return View(weatherNote);
+                Notes = notes,
+                Temps = mytemperaturlist
+            };
+
+            return View(viewmodel);
         }
 
         // GET: WeatherNotes/Create
@@ -56,37 +54,6 @@ namespace WeatherNote.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(weatherNote);
-        }
-
-        // GET: WeatherNotes/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Models.WeatherNote weatherNote = db.Notes.Find(id);
-            if (weatherNote == null)
-            {
-                return HttpNotFound();
-            }
-            return View(weatherNote);
-        }
-
-        // POST: WeatherNotes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "WeatherNoteId,Date,Message")] Models.WeatherNote weatherNote)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(weatherNote).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
             return View(weatherNote);
         }
 
